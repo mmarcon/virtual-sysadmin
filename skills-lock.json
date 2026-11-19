@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "skills": {
+    "atlas-agent-engine": {
+      "source": "mongodb/agent-engine-examples",
+      "commit": "ad0da896e795db79bae6bb19122cb54ce3018dc0",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/atlas-agent-engine/SKILL.md",
+      "computedHash": "e0d76b3086269c875010ed270038a32baca5f6235d7a81bd58d2ca7f0b5dee49"
+    },
+    "atlas-agent-engine-docs": {
+      "source": "mongodb/agent-engine-examples",
+      "commit": "ad0da896e795db79bae6bb19122cb54ce3018dc0",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/atlas-agent-engine-docs/SKILL.md",
+      "computedHash": "3ad11bf89f4d868a53e8a628712953c6ce5f514b31fa75cd744c3d1ecf861108"
+    },
+    "feature-validations": {
+      "source": "mongodb/agent-engine-examples",
+      "commit": "ad0da896e795db79bae6bb19122cb54ce3018dc0",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/feature-validations/SKILL.md",
+      "computedHash": "6ca67c6f4dba086442eba27ad92b56fce01daa63ae6531a772f91e6dab66f125"
+    },
+    "troubleshoot-deploy": {
+      "source": "mongodb/agent-engine-examples",
+      "commit": "ad0da896e795db79bae6bb19122cb54ce3018dc0",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/troubleshoot-deploy/SKILL.md",
+      "computedHash": "ec27632b73600d82b43ed6ad921047ad49ed3d6bdb38b2dfd8b20b40f75fdb0e"
+    }
+  }
+}

@@ -1,0 +1,106 @@
+# Project-level settings go in this file.
+
+memory:
+  # Memory-server log level. One of: debug | info | warning | error | critical.
+  log_level: info
+
+  # Voyage AI embeddings.
+  # The Voyage API key is NOT set here — upload it as a project secret with:
+  #   agentengine secret set VOYAGE_API_KEY
+  voyage:
+    model: "voyage-4-large"
+    dimension: 1024
+
+  # Short-term memory write-path behaviour.
+  short_term:
+    # Embed each turn's content when it is written (only when the caller supplies
+    # no embedding), so it is searchable by relevance immediately instead of
+    # waiting for background embedding. Adds embedding latency to the write.
+    # Required true because short_term is listed in metadata_partition_index with
+    # a vector leg below.
+    embed_on_write: true
+
+  # Multi-tenancy: filterable metadata attributes. The AI Sysadmin demo stamps
+  # every memory write with metadata.tenant_id = <EndlessWarden customer> and filters
+  # every read on the qualified path "metadata.tenant_id", so one customer's
+  # memory never surfaces for another. Partition keys are write-once (the name
+  # and type cannot change later) and require memory-server 0.0.81+.
+  metadata_partition_key:
+    - name: tenant_id
+      type: string
+
+  # Which index legs serve each memory source's metadata filter. "both" gives a
+  # source vector and text legs, so a hybrid source can filter on tenant_id.
+  # Only partition-scoped types are allowed here: semantic, episodic, procedural,
+  # short_term. taxonomic is project-wide shared knowledge and cannot be
+  # partition-scoped, so it is not listed; the agent scopes glossary terms by
+  # filtering the returned records on their tenant_id metadata.
+  metadata_partition_index:
+    semantic: [both]
+    episodic: [both]
+    procedural: [both]
+    short_term: [both]
+
+  # LLM the memory server uses for background extraction.
+  # Agents can use a different provider/model.
+  # After changing it, run:
+  #   agentengine memory configure && agentengine memory apply
+  # The API key is NOT set here. Upload it as a project secret:
+  #   agentengine secret set LLM_API_KEY --sync
+  extraction_llm:
+    provider: openai
+    model: gpt-6.1-sol
+    base_url: https://grove-gateway-prod.azure-api.net/grove-foundry-prod/openai/v1
+    api_key_secret: LLM_API_KEY
+    auth_header: api-key
+
+  background_extraction:
+    # Snapshot promotion
+    snapshot:
+      max_messages: 20
+      stale_minutes: 1
+
+  # Extraction pipeline. The 'enabled' list below selects which memory types are
+  # extracted in the background; it ships with a sensible default set. Edit the
+  # list to add or remove types, or set it to [] to turn extraction off entirely.
+  # Valid types: semantic, episodic, taxonomic, preferences, procedural.
+  # Each type may also take an optional 'prompt' to override the system default, e.g.
+  #   semantic:
+  #     prompt: "..."
+  # NOTE: removing the 'enabled' line entirely falls back to the server default;
+  # keep an explicit list (or []) to control exactly which types run.
+  extraction:
+    enabled:
+      - semantic
+      - episodic
+      - taxonomic
+      - procedural
+
+    # Override the default semantic extraction prompt. The stock prompt captures
+    # only personal facts about the end user (name, hobbies, preferences), which
+    # yields nothing for IT troubleshooting conversations. This variant captures
+    # durable facts about the customer's IT environment instead.
+    semantic:
+      prompt: |
+        You are a semantic memory extraction system for an IT operations (digital
+        employee experience) assistant. Analyze the conversation and extract
+        durable, reusable facts about the customer's IT environment. Do not extract
+        personal details about the user, and ignore anything about the assistant
+        itself.
+
+        Extract facts such as:
+        - Environment: standard OS images, hardware models, sites, departments,
+          software names and versions, and configurations.
+        - Known issues: applications with recurring crashes or freezes, error
+          codes, affected device populations, and identified root causes.
+        - Operational knowledge: remediation outcomes, policies, alert thresholds,
+          and escalation paths.
+        - Named entities: device names, application names, sites, and the teams
+          that own them.
+
+        Each fact must be a single, atomic, self-contained statement. Generate
+        memories in the same language as the conversation. If there is nothing
+        durable to extract, return an empty list.
+
+        Return ONLY valid JSON matching this schema:
+        {"memories": [{"content": str, "citations": [list of source message indices], "confidence_score": float}]}

@@ -1,0 +1,47 @@
+# Human-readable app slug used by Agent Engine tooling.
+name: virtual-sysadmin
+# Python import path to the SDK App instance.
+# Format: <module path>:<variable name>. This template exposes `app` from
+# src/agent_virtual_sysadmin/main.py.
+entrypoint: agent_virtual_sysadmin.main:app
+framework: adk
+# Runtime feature flags controlled by agent.yaml, not .env. A key that is
+# present here wins over any ENABLE_* environment variable, so declaring memory
+# keeps ambient environment state from switching it on behind your back.
+# memory: true enables long-term memory; VOYAGE_API_KEY must be present in .env.
+features:
+    durable_workflow: true
+    memory: true
+# Tool placement and pass-through secrets.
+#   - agent sandbox (is_local=True): memory/context tools, which need the
+#     runtime context (custom headers, app.memory, session id).
+#   - tool sandbox (is_local=False): the simulated EndlessWarden API tools, which
+#     run isolated and receive the tenant explicitly.
+sandboxes:
+    agent:
+        secrets: ["*"]
+        tools:
+            - get_request_context
+            - recall_context
+            - recall_personal_context
+            - save_fact
+            - save_incident_episode
+            - save_runbook
+            - save_glossary_term
+            - lookup_glossary
+            - discover_runbook
+            - seed_demo_knowledge
+    tool:
+        secrets: ["*"]
+        tools:
+            - endlesswarden_query
+            - endlesswarden_list_devices
+            - endlesswarden_get_device
+            - endlesswarden_list_applications
+            - endlesswarden_get_dex_score
+            - endlesswarden_list_alerts
+            - endlesswarden_assess_alert_impact
+            - endlesswarden_run_remote_action
+version: 0.1.0
+network:
+    egress_mode: allow_all
