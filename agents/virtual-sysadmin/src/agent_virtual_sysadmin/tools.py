@@ -342,31 +342,6 @@ def register(app: App) -> None:
         return _ok({"status": "error", "error": "Memory is not enabled"})
 
     @app.tool()
-    def save_incident_episode(title: str, content: str, summary: str = "") -> str:
-        """Save a troubleshooting episode: what happened, the decision, and the outcome.
-
-        Args:
-            title: Short title, e.g. "Teams crashes on WKS-4471".
-            content: Full narrative of the incident and resolution.
-            summary: Optional one-line summary.
-        """
-        tenant = resolve_tenant()
-        result = app.memory.save_episode(
-            title=title,
-            content=content,
-            summary=summary or None,
-            participants=[current_user_id(), "ai_sysadmin"],
-            tags=[tenant],
-            metadata={**tenant_metadata(tenant), "type": "incident"},
-            user_id=current_user_id(),
-            session_id=current_session_id(),
-            visibility="org",
-        )
-        if getattr(result, "acknowledged", bool(result)):
-            return _ok({"status": "saved", "tenant_id": tenant, "title": title})
-        return _ok({"status": "error", "error": "Memory is not enabled"})
-
-    @app.tool()
     def save_runbook(procedure: str, description: str, content: str, steps_json: str = "[]") -> str:
         """Save or update a reusable remediation runbook for the tenant.
 

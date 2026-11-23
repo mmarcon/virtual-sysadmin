@@ -25,7 +25,6 @@ sandboxes:
             - recall_context
             - recall_personal_context
             - save_fact
-            - save_incident_episode
             - save_runbook
             - save_glossary_term
             - lookup_glossary

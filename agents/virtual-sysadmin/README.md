@@ -16,7 +16,7 @@ isolation through memory metadata filtering.
 |---|---|
 | Simulated API calls + troubleshooting | Remote tools (`endlesswarden_*`) query a deterministic mock of the EndlessWarden data model. |
 | Human-in-the-loop | `endlesswarden_run_remote_action` is wrapped in `FunctionTool(..., require_confirmation=True)`; the run suspends for approval before the action executes. |
-| All memory types | Semantic (`save_fact`), episodic (`save_incident_episode`), procedural (`save_runbook`), taxonomic (`save_glossary_term`), plus short-term turns recorded by the platform. |
+| All memory types | Semantic (`save_fact`), procedural (`save_runbook`), taxonomic (`save_glossary_term`), episodic (background extraction), plus short-term turns recorded by the platform. |
 | Automatic extraction | Background extraction (`memory.extraction.enabled` in `project-config.yaml`) distils free-form chat into long-term memory, recalled in a later session. |
 | Multi-tenancy | Every memory write stamps `metadata.tenant_id`; every read filters on the declared partition key `metadata.tenant_id`, so one customer's memory never surfaces for another. |
 
@@ -79,8 +79,9 @@ As `acme-corp:alice`:
 The agent calls `get_request_context`, finds Priya's device (`WKS-4471`), lists
 application crashes, checks the DEX score, recalls related incidents and
 runbooks, and proposes a fix. It then calls `endlesswarden_run_remote_action`, which
-**suspends for approval**. Approve it; the run resumes, the action executes, and
-the agent saves an incident episode.
+**suspends for approval**. Approve it; the run resumes and the action executes.
+Once the session goes idle, background extraction records the incident as an
+episode.
 
 ### Act 2 — Automatic extraction
 
