@@ -37,6 +37,7 @@ sandboxes:
             - endlesswarden_list_devices
             - endlesswarden_get_device
             - endlesswarden_list_applications
+            - endlesswarden_find_affected_devices
             - endlesswarden_get_dex_score
             - endlesswarden_list_alerts
             - endlesswarden_assess_alert_impact

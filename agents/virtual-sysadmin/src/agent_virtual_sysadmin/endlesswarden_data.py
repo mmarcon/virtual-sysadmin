@@ -161,14 +161,148 @@ TENANTS: dict[str, dict[str, Any]] = {
                 "boot_seconds": 33,
                 "logon_seconds": 24,
             },
+            {
+                "name": "WKS-4502",
+                "owner": "marcus.webb@acme.example",
+                "department": "Finance",
+                "site": "London",
+                "platform": "Windows 11 23H2",
+                "hardware_model": "Lenovo ThinkPad T14 Gen 4",
+                "memory_gb": 16,
+                "collector_version": "24.3",
+                "dex": {
+                    "score": 45,
+                    "endpoint": 44,
+                    "applications": 33,
+                    "collaboration": 58,
+                    "sentiment": 47,
+                },
+                "metrics": {
+                    "cpu_usage_pct": 71,
+                    "ram_usage_pct": 80,
+                    "disk_free_pct": 14,
+                    "disk_queue_length": 3.4,
+                },
+                "boot_seconds": 88,
+                "logon_seconds": 66,
+            },
+            {
+                "name": "WKS-4515",
+                "owner": "aisha.khan@acme.example",
+                "department": "Finance",
+                "site": "Berlin",
+                "platform": "Windows 11 23H2",
+                "hardware_model": "Lenovo ThinkPad T14 Gen 4",
+                "memory_gb": 16,
+                "collector_version": "24.3",
+                "dex": {
+                    "score": 48,
+                    "endpoint": 46,
+                    "applications": 36,
+                    "collaboration": 60,
+                    "sentiment": 50,
+                },
+                "metrics": {
+                    "cpu_usage_pct": 69,
+                    "ram_usage_pct": 78,
+                    "disk_free_pct": 17,
+                    "disk_queue_length": 3.1,
+                },
+                "boot_seconds": 84,
+                "logon_seconds": 62,
+            },
+            {
+                "name": "WKS-3391",
+                "owner": "ruth.meyer@acme.example",
+                "department": "Finance",
+                "site": "London",
+                "platform": "Windows 10 22H2",
+                "hardware_model": "HP EliteBook 840 G8",
+                "memory_gb": 8,
+                "collector_version": "23.9",
+                "dex": {
+                    "score": 36,
+                    "endpoint": 30,
+                    "applications": 32,
+                    "collaboration": 44,
+                    "sentiment": 42,
+                },
+                "metrics": {
+                    "cpu_usage_pct": 80,
+                    "ram_usage_pct": 90,
+                    "disk_free_pct": 10,
+                    "disk_queue_length": 5.5,
+                },
+                "boot_seconds": 118,
+                "logon_seconds": 96,
+            },
+            {
+                "name": "WKS-2244",
+                "owner": "lena.fischer@acme.example",
+                "department": "Sales",
+                "site": "Berlin",
+                "platform": "Windows 11 23H2",
+                "hardware_model": "Dell Latitude 5440",
+                "memory_gb": 16,
+                "collector_version": "24.3",
+                "dex": {
+                    "score": 51,
+                    "endpoint": 49,
+                    "applications": 38,
+                    "collaboration": 63,
+                    "sentiment": 52,
+                },
+                "metrics": {
+                    "cpu_usage_pct": 66,
+                    "ram_usage_pct": 74,
+                    "disk_free_pct": 21,
+                    "disk_queue_length": 2.7,
+                },
+                "boot_seconds": 79,
+                "logon_seconds": 58,
+            },
+            {
+                "name": "WKS-4488",
+                "owner": "omar.haddad@acme.example",
+                "department": "Marketing",
+                "site": "London",
+                "platform": "Windows 11 23H2",
+                "hardware_model": "Lenovo ThinkPad T14 Gen 4",
+                "memory_gb": 16,
+                "collector_version": "24.3",
+                "dex": {
+                    "score": 55,
+                    "endpoint": 52,
+                    "applications": 41,
+                    "collaboration": 67,
+                    "sentiment": 56,
+                },
+                "metrics": {
+                    "cpu_usage_pct": 62,
+                    "ram_usage_pct": 71,
+                    "disk_free_pct": 26,
+                    "disk_queue_length": 2.3,
+                },
+                "boot_seconds": 74,
+                "logon_seconds": 55,
+            },
         ],
         "applications": [
             {
                 "name": "Microsoft Teams",
                 "vendor": "Microsoft",
-                "crashes_7d": 148,
+                "crashes_7d": 162,
                 "freezes_7d": 62,
-                "affected_devices": ["WKS-4471", "WKS-2210", "WKS-3390"],
+                "affected_devices": [
+                    "WKS-4471",
+                    "WKS-3390",
+                    "WKS-4502",
+                    "WKS-3391",
+                    "WKS-4515",
+                    "WKS-2210",
+                    "WKS-2244",
+                    "WKS-4488",
+                ],
                 "avg_response_ms": 1840,
                 "error_rate": 0.11,
             },
@@ -238,12 +372,48 @@ TENANTS: dict[str, dict[str, Any]] = {
                 "version": "1.2024.1108",
             },
             {
-                "device": "MAC-1108",
-                "binary": "Microsoft Teams",
+                "device": "WKS-4502",
+                "binary": "teams.exe",
                 "application": "Microsoft Teams",
-                "count_7d": 2,
+                "count_7d": 22,
+                "first_seen": "2026-11-09",
+                "error_code": "0xc0000005",
+                "version": "24152.0.0",
+            },
+            {
+                "device": "WKS-4515",
+                "binary": "teams.exe",
+                "application": "Microsoft Teams",
+                "count_7d": 17,
+                "first_seen": "2026-11-10",
+                "error_code": "0xc0000005",
+                "version": "24152.0.0",
+            },
+            {
+                "device": "WKS-3391",
+                "binary": "teams.exe",
+                "application": "Microsoft Teams",
+                "count_7d": 9,
+                "first_seen": "2026-11-11",
+                "error_code": "0xc0000005",
+                "version": "24152.0.0",
+            },
+            {
+                "device": "WKS-2244",
+                "binary": "teams.exe",
+                "application": "Microsoft Teams",
+                "count_7d": 14,
+                "first_seen": "2026-11-10",
+                "error_code": "0xc0000005",
+                "version": "24152.0.0",
+            },
+            {
+                "device": "WKS-4488",
+                "binary": "teams.exe",
+                "application": "Microsoft Teams",
+                "count_7d": 11,
                 "first_seen": "2026-11-12",
-                "error_code": "-10670",
+                "error_code": "0xc0000005",
                 "version": "24152.0.0",
             },
         ],
@@ -272,15 +442,54 @@ TENANTS: dict[str, dict[str, Any]] = {
                 "logon_seconds": 24,
                 "failed_logins_7d": 0,
             },
+            {
+                "device": "WKS-4502",
+                "user": "marcus.webb@acme.example",
+                "logon_seconds": 66,
+                "failed_logins_7d": 0,
+            },
+            {
+                "device": "WKS-4515",
+                "user": "aisha.khan@acme.example",
+                "logon_seconds": 62,
+                "failed_logins_7d": 1,
+            },
+            {
+                "device": "WKS-3391",
+                "user": "ruth.meyer@acme.example",
+                "logon_seconds": 96,
+                "failed_logins_7d": 3,
+            },
+            {
+                "device": "WKS-2244",
+                "user": "lena.fischer@acme.example",
+                "logon_seconds": 58,
+                "failed_logins_7d": 0,
+            },
+            {
+                "device": "WKS-4488",
+                "user": "omar.haddad@acme.example",
+                "logon_seconds": 55,
+                "failed_logins_7d": 0,
+            },
         ],
         "alerts": [
             {
                 "id": "ALT-9001",
                 "severity": "high",
-                "title": "Microsoft Teams crash spike across Finance",
+                "title": "Microsoft Teams crash spike across multiple departments",
                 "scope": "application",
                 "target": "Microsoft Teams",
-                "affected_devices": ["WKS-4471", "WKS-2210", "WKS-3390"],
+                "affected_devices": [
+                    "WKS-4471",
+                    "WKS-3390",
+                    "WKS-4502",
+                    "WKS-3391",
+                    "WKS-4515",
+                    "WKS-2210",
+                    "WKS-2244",
+                    "WKS-4488",
+                ],
                 "impact": "SIGNIFICANT",
                 "created": "2026-11-16",
                 "monitor": "App crash count > 20 on > 2 devices",
@@ -291,7 +500,7 @@ TENANTS: dict[str, dict[str, Any]] = {
                 "title": "Slow logons on the Windows 10 fleet",
                 "scope": "device",
                 "target": "WKS-3390",
-                "affected_devices": ["WKS-3390"],
+                "affected_devices": ["WKS-3390", "WKS-3391"],
                 "impact": "MODERATE",
                 "created": "2026-11-15",
                 "monitor": "Logon duration > 90s for 3 consecutive days",
@@ -608,6 +817,57 @@ def list_applications(tenant_id: str, device_name: str = "") -> list[dict[str, A
             a for a in applications if any(d.lower() == needle for d in a["affected_devices"])
         ]
     return applications
+
+
+def find_affected_devices(
+    tenant_id: str, application: str, version: str = ""
+) -> dict[str, Any] | None:
+    """Correlate an application's crashes into the population of affected devices.
+
+    Groups ``execution.crashes`` rows by device for the given application (and
+    optional version), and enriches each device with its owner, department,
+    site, and DEX score. This is the fleet-wide view behind a single report.
+    """
+    tenant = get_tenant(tenant_id)
+    if tenant is None:
+        return None
+    needle = application.strip().lower()
+    rows = [
+        r
+        for r in tenant["crashes"]
+        if needle in r["application"].lower() and (not version or r["version"] == version)
+    ]
+    crashes_by_device: dict[str, int] = {}
+    first_seen: dict[str, str] = {}
+    for row in rows:
+        crashes_by_device[row["device"]] = crashes_by_device.get(row["device"], 0) + row["count_7d"]
+        first_seen.setdefault(row["device"], row["first_seen"])
+
+    devices = []
+    for device in tenant["devices"]:
+        if device["name"] not in crashes_by_device:
+            continue
+        devices.append(
+            {
+                "device": device["name"],
+                "owner": device["owner"],
+                "department": device["department"],
+                "site": device["site"],
+                "platform": device["platform"],
+                "dex_score": device["dex"]["score"],
+                "crashes_7d": crashes_by_device[device["name"]],
+                "first_seen": first_seen[device["name"]],
+            }
+        )
+    devices.sort(key=lambda d: d["crashes_7d"], reverse=True)
+    return {
+        "application": application,
+        "version": version or "any",
+        "affected_device_count": len(devices),
+        "departments": sorted({d["department"] for d in devices}),
+        "sites": sorted({d["site"] for d in devices}),
+        "devices": devices,
+    }
 
 
 def get_dex_score(

@@ -70,30 +70,51 @@ from the `tenant:` prefix). Use `globex:bob` for the second tenant.
 
 ## Demo script
 
-### Act 1 — Troubleshoot, with memory and HITL
+As `acme-corp:alice`. The scenario runs in three beats — diagnose one device, fix
+it, then sweep the fleet — which is where human-in-the-loop earns its keep.
 
-As `acme-corp:alice`:
+### Beat 1 — Diagnose (no changes)
 
-> "Teams keeps crashing on Priya's laptop."
+> "Teams keeps crashing on Priya's laptop (WKS-4471). What's going on?"
 
-The agent calls `get_request_context`, finds Priya's device (`WKS-4471`), lists
-application crashes, checks the DEX score, recalls related incidents and
-runbooks, and proposes a fix. It then calls `endlesswarden_run_remote_action`, which
-**suspends for approval**. Approve it; the run resumes and the action executes.
+The agent calls `get_request_context`, recalls tenant knowledge, pulls the device,
+its crash history, its DEX score, and any related alerts, then presents the finding
+and a recommended fix. It changes nothing and waits.
+
+### Beat 2 — Fix Priya (HITL #1)
+
+> "Go ahead and fix it."
+
+The agent proposes clearing the Teams cache on `WKS-4471` and calls
+`endlesswarden_run_remote_action`, which **suspends for approval**. Approve; the run
+resumes and the action executes.
+
+### Beat 3 — Sweep the fleet (HITL #2, the showcase)
+
+> "Are other people affected? Fix them too."
+
+The agent correlates the crashes with `endlesswarden_find_affected_devices` and
+finds **8 devices on Teams 24152.0.0 across three departments** — five in Finance,
+but also Sales and Marketing. It proposes one bulk remediation for all eight.
+
+Deny it, and the agent narrows the scope and re-proposes (e.g. Finance only).
+Approve the narrower action, and it executes. That's the beat that shows a human
+actually steering the agent rather than rubber-stamping.
+
 Once the session goes idle, background extraction records the incident as an
 episode.
 
-### Act 2 — Automatic extraction
+### Then — automatic extraction
 
-Have a free-form chat about Acme's environment (the standard image, sites, known
-issues) — without asking the agent to save anything. End the session, start a
-**new** session as the same user, and ask what it knows. The agent recalls facts
-extracted in the background, via `recall_personal_context`.
+Have a free-form chat about Acme's environment (standard image, sites, known
+issues) without asking the agent to save anything. End the session, start a **new**
+session as the same user, and ask what it knows — the agent recalls facts extracted
+in the background via `recall_personal_context`.
 
-### Act 3 — Multi-tenancy
+### Then — multi-tenancy
 
-Run Act 1's question as `globex:bob`. Acme's facts, incidents, glossary, and
-runbooks never appear; only Globex's own tenant data and memory are returned.
+Run Beat 1 as `globex:bob`. Acme's facts, incidents, glossary, and runbooks never
+appear; only Globex's own tenant data and memory are returned.
 
 ## Seed tenant knowledge
 

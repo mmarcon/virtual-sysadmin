@@ -158,6 +158,29 @@ def register(app: App) -> None:
         return _ok({"application_count": len(applications), "applications": applications})
 
     @app.tool(is_local=False)
+    def endlesswarden_find_affected_devices(
+        tenant_id: str, application: str, version: str = ""
+    ) -> str:
+        """Find every device affected by an application's crashes (the fleet view).
+
+        Correlates execution.crashes into the population of devices reporting the
+        same application (and version), each with its owner, department, site,
+        and DEX score. Use this to turn one report into a fleet-wide picture
+        before proposing a remediation.
+
+        Args:
+            tenant_id: The customer (tenant), from get_request_context.
+            application: The application name, e.g. "Microsoft Teams".
+            version: Optional version to scope to, e.g. "24152.0.0".
+        """
+        if not _known(tenant_id):
+            return _tenant_error(tenant_id)
+        result = endlesswarden_data.find_affected_devices(tenant_id, application, version)
+        if result is None:
+            return _tenant_error(tenant_id)
+        return _ok(result)
+
+    @app.tool(is_local=False)
     def endlesswarden_get_dex_score(
         tenant_id: str, subject: str, subject_type: str = "device"
     ) -> str:
@@ -206,19 +229,40 @@ def register(app: App) -> None:
         return _ok(result)
 
     @app.tool(is_local=False)
-    def endlesswarden_run_remote_action(tenant_id: str, device_name: str, action: str) -> str:
-        """Execute a scripted remediation Remote Action on an endpoint.
+    def endlesswarden_run_remote_action(
+        tenant_id: str, device_names: list[str], action: str
+    ) -> str:
+        """Execute a scripted remediation Remote Action on one or more endpoints.
 
-        This is a MUTATING action. It requires human approval before it runs.
+        This is a MUTATING action. It requires human approval before it runs, and
+        that approval covers every device in the list, so state the scope (which
+        devices, which users, which departments) before you call it. A single
+        device is a one-element list.
 
         Args:
             tenant_id: The customer (tenant), from get_request_context.
-            device_name: The target device, e.g. "WKS-4471".
+            device_names: The target devices, e.g. ["WKS-4471"], or a fleet list.
             action: The action to run, e.g. "Clear Teams cache and restart Teams".
         """
         if not _known(tenant_id):
             return _tenant_error(tenant_id)
-        return _ok(endlesswarden_data.run_remote_action(tenant_id, device_name, action))
+        if not device_names:
+            return _ok({"status": "error", "error": "device_names must not be empty."})
+        executions = [
+            endlesswarden_data.run_remote_action(tenant_id, device, action)
+            for device in device_names
+        ]
+        failed = [e for e in executions if e.get("status") != "completed"]
+        return _ok(
+            {
+                "status": "completed" if not failed else "partial",
+                "action": action,
+                "device_count": len(device_names),
+                "succeeded": len(executions) - len(failed),
+                "failed": len(failed),
+                "executions": executions,
+            }
+        )
 
     # -----------------------------------------------------------------------
     # Context and memory tools (local: run in the Agent Sandbox)
