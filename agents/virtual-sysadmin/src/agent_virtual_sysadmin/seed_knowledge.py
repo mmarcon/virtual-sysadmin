@@ -90,7 +90,7 @@ TENANT_FACTS: dict[str, list[tuple[str, str]]] = {
         ),
         (
             "teams-issue",
-            "Microsoft Teams 24152.0.0 has a known crash issue on Acme devices (error 0xc0000005), affecting the Finance team most.",
+            "Microsoft Teams 24152.0.0 has a known crash issue on Acme devices (error 0xc0000005), hitting Finance hardest but also affecting Sales and Marketing.",
         ),
     ],
     "globex": [
